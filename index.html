@@ -1,20 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <!-- Reference to the Bing Maps SDK -->
-    <script
-      type="text/javascript"
-      src="http://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=An6XMSRtS1CVzkYmUCeYnuLTKnMFBKsQQgeFM7kxtATJHF9REGCQgsHpQgrLL8Bu"
-      async
-      defer
-    ></script>
-  </head>
-  <body>
-    <div id="myMap" style="position:relative;width:80%;height:70%;"></div>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park-Inspector</title>
+    <link rel="stylesheet" href="style.css">
+    <script type='text/javascript'
+    src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AvtYudpMz5yxXsz_Kfi8vfyKk0QmTKogXvfqS-MNu8V9xXYn2RExM4qkq7hAW2VG' 
+    async defer></script>   
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <h1>Park-Inspector</h1>
+            </div>
+            <p>How it works</p>
+        </div>
+    </header>   
+
+    <div class="container">
+        <form action="">
+            <select name="" id="">
+                <option value="placeholder">Parking type</option>
+                <option value="on-street">On street</option>
+                <option value="complex">Parking complex</option>
+            </select>
+
+            <select name="hours">
+                <option value="placeholder">Length of stay</option>
+                <option value="15">15 minutes</option>
+                <option value="30">30 minutes</option>
+                <option value="60">60 minutes</option>
+                <option value="120">120 minutes</option>
+                <option value="180">180 minutes</option>
+                <option value="240">240 minutes</option>
+            </select>
+        </form>
+
+        <div id="myMap"></div>
+    </div>
+
+    <footer>
+        <p>&copy; Camilla, David, Gordon, Tarik 2020</p>
+    </footer>
+    
     <script src="app.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </body>
 </html>
