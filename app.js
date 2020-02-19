@@ -14,22 +14,38 @@ function GetMap() {
         .get(url)
         .then(results => {
             bays = results
-            checkBayStatus(bays, displayBays.value)
+            checkBayStatus(bays, displayBaysByStatus.value)
         })  
     creatInfoBox(map);
 } 
 
 var checkBayStatus = (bays, displayBayValue) => {
+    // hide bay info slide down
+    var bayInfoSection = document.querySelector('.bayInfo')
+    if (bayInfoSection.style.display == 'block') {
+        $('.bayInfo').slideToggle(250);
+    }
+    // clear infobox
+    infobox.setOptions({
+        visible: false,
+    })
+    // clear pins from map
     map.entities.clear()
+    // clear drawn pin array
+    var drawnPins = []
+    // check bay status
     bays.data.forEach(bay => {
         if (displayBayValue === 'both') {
+            drawnPins.push(bay)
             createPin(bay)
         } else if (displayBayValue === 'empty') {
             if (bay.status !== 'Present') {
+                drawnPins.push(bay)
                 createPin(bay)
             }
         } else if (displayBayValue === 'occupied') {
             if (bay.status === 'Present') {
+                drawnPins.push(bay)
                 createPin(bay)
             }
         }
@@ -83,33 +99,33 @@ var createPin = (bay) => {
 }
 
 var creatInfoBox = map => {
-        //Create an infobox at the center of the map but don't show it.
-        infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
-            visible: false,
-            actions: [{
-                label: 'More info',
-            }]
-        });
-        //Assign the infobox to a map instance.
-        infobox.setMap(map);
-    }
+    //Create an infobox at the center of the map but don't show it.
+    infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
+        visible: false,
+        actions: [{
+            label: 'More info',
+        }]
+    });
+    //Assign the infobox to a map instance.
+    infobox.setMap(map);
+}
 
-var getParkingBayInfo = data => {    
+var getParkingBayInfo = bay => {    
     var bayInfoSection = document.querySelector('.bayInfo')
     if (bayInfoSection.style.display !== 'block') {
-        $('.bayInfo').slideToggle(350);
+        $('.bayInfo').slideToggle(250);
     }
 
     var descriptions = []
-    if (data.description1 !== null) { descriptions.push(data.description1) } 
-    if (data.description2 !== null) { descriptions.push(data.description2) }
-    if (data.description3 !== null) { descriptions.push(data.description3) }
-    if (data.description4 !== null) { descriptions.push(data.description4) }
-    if (data.description5 !== null) { descriptions.push(data.description5) }
-    if (data.description6 !== null) { descriptions.push(data.description6) }
+    if (bay.description1 !== null) { descriptions.push(bay.description1) } 
+    if (bay.description2 !== null) { descriptions.push(bay.description2) }
+    if (bay.description3 !== null) { descriptions.push(bay.description3) }
+    if (bay.description4 !== null) { descriptions.push(bay.description4) }
+    if (bay.description5 !== null) { descriptions.push(bay.description5) }
+    if (bay.description6 !== null) { descriptions.push(bay.description6) }
 
     var status;
-    if (data.status === 'Present') {
+    if (bay.status === 'Present') {
         status = 'Bay occupied'
     } else {
         status = 'Bay empty'
@@ -117,7 +133,7 @@ var getParkingBayInfo = data => {
 
     var infoDiv = document.querySelector('.infoList')
     infoDiv.innerHTML = `
-        <p class="infoListHeading">Parking bay: ${data.bayid}</p>
+        <p class="infoListHeading">Parking bay: ${bay.bayid}</p>
         <li>Bay status: ${status}</li>
         <li>Bay info: </li>
             <ul>
@@ -126,17 +142,28 @@ var getParkingBayInfo = data => {
         `
 }
 
+// event listeners
+let displayBaysByStatus = document.querySelector('#bayStatus');
+displayBaysByStatus.addEventListener('change', () => {
+    checkBayStatus(bays, displayBaysByStatus.value)
+})
+
+let dispalyBayByHour = document.querySelector('#hours');
+dispalyBayByHour.addEventListener('change', () => {
+    console.log(dispalyBayByHour.value)
+})
+
+document.querySelector('#reset').addEventListener('click', () => {
+        checkBayStatus(bays, 'both')
+})
+
+// toggle functions
 $('.toggle').click(function(e) {
     e.preventDefault();
-    $('.about').slideToggle(350);
+    $('.about').slideToggle(250);
 }); 
        
 $('.toggleInfo').click(function(e) {
     e.preventDefault();
-    $('.bayInfo').slideToggle(350);
+    $('.bayInfo').slideToggle(250);
 }); 
-
-let displayBays = document.querySelector('#displayBays');
-displayBays.addEventListener("change", () => {
-    checkBayStatus(bays, displayBays.value)
-})

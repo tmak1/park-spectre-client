@@ -32,13 +32,13 @@
 
         <section class="mapContent">            
             <form action="">
-                <select name="bayStatus" id="displayBays">
+                <select name="bayStatus" id="bayStatus">
                     <option value="both">Empty & Occupied Bays</option>
                     <option value="empty">Empty Bays Only</option>
                     <option value="occupied">Occupied Bays Only</option>
                 </select>
 
-                <!-- <select name="hours">
+                <select name="hours" id="hours">
                     <option value="placeholder">Length of stay</option>
                     <option value="15">15 minutes</option>
                     <option value="30">30 minutes</option>
@@ -46,7 +46,9 @@
                     <option value="120">120 minutes</option>
                     <option value="180">180 minutes</option>
                     <option value="240">240 minutes</option>
-                </select> -->
+                </select>
+
+                <input type="reset" value="Reset filters" id="reset">
             </form>
             
             <section class="bayInfo">
