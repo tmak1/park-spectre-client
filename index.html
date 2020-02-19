@@ -16,36 +16,49 @@
             <div class="logo">
                 <h1>Park-Inspector</h1>
             </div>
-            <p>How it works</p>
-        </div>
-    </header>   
-
+        <p><a class="toggle" href="javascript:void(0);">How it works</a></p>
+    </header>  
+    
     <div class="container">
-        <form action="">
-            <select name="" id="">
-                <option value="placeholder">Parking type</option>
-                <option value="on-street">On street</option>
-                <option value="complex">Parking complex</option>
-            </select>
 
-            <select name="hours">
-                <option value="placeholder">Length of stay</option>
-                <option value="15">15 minutes</option>
-                <option value="30">30 minutes</option>
-                <option value="60">60 minutes</option>
-                <option value="120">120 minutes</option>
-                <option value="180">180 minutes</option>
-                <option value="240">240 minutes</option>
-            </select>
-        </form>
+        <aside class="about" style="display: none;">
+            <p>Welcome to Park-Inspector! 
+                Our app uses data provided by Melbourne City Council that looks at the on-street parking censors around the city. The data is updated every XXX minutes. A vacant parking space is represented by a XXX and a occupied space is represented by a XXX. 
+            </p>
+            <p class="hide">
+                <a class="toggle" href="javascript:void(0);">Hide</a>
+            </p>           
+        </aside>
 
-        <div id="myMap"></div>
+        <section class="mapContent">            
+            <form action="">
+                <select name="" id="">
+                    <option value="placeholder">Parking type</option>
+                    <option value="on-street">On street</option>
+                    <option value="complex">Parking complex</option>
+                </select>
+
+                <select name="hours">
+                    <option value="placeholder">Length of stay</option>
+                    <option value="15">15 minutes</option>
+                    <option value="30">30 minutes</option>
+                    <option value="60">60 minutes</option>
+                    <option value="120">120 minutes</option>
+                    <option value="180">180 minutes</option>
+                    <option value="240">240 minutes</option>
+                </select>
+            </form>
+
+            <div id="myMap"></div>
+        </section>
     </div>
 
     <footer>
         <p>&copy; Camilla, David, Gordon, Tarik 2020</p>
     </footer>
     
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

@@ -6,6 +6,10 @@ header {
     border-bottom: 1px solid black;
 }
 
+a {
+    color: black;
+}
+
 .header-content {
     display: grid;
     grid-template-columns: .5fr .5fr;
@@ -26,10 +30,35 @@ header {
     max-width: 800px;
     margin: auto;
     padding: 10px;
+    display: grid;
+    position: relative;
+}
+
+/* how it works toggle styling */
+.about {
+    position: absolute;
+}
+
+.about p {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    position: relative;
+    z-index: 100000;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.about p:first-child {
+    padding: 20px 20px 0px;
+}
+
+.hide {
+    padding: 0px 20px 20px;
+    text-align: right;
 }
 
 form {
     padding-bottom: 5px;
+    text-align: right;
 }
 
 /* map styling */
@@ -43,15 +72,6 @@ form {
 .NavBar_MapTypeButtonContainerWrapper {
     display: none;
 }
-
-/* change my location button image */
-/* .MicrosoftMap .NavBar_Container.Light .NavBar_locateMe {
-    background-image: url(images/my_location.png) !important;
-}
-
-.MicrosoftMap .NavBar_Container.Light .NavBar_locateMe:hover {
-    background-image: url(images/my_location_hover.png) !important;
-} */
 
 /* footer styling */
 
@@ -69,3 +89,4 @@ footer p {
     font-size: small;
     text-align: center;
 }
+
