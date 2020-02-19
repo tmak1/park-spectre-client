@@ -4,8 +4,3 @@ function GetMap() {
         zoom: 15
     });
 }
-
-$('.toggle').click(function(e) {
-    e.preventDefault();
-    $('.about').slideToggle(350);
-});
