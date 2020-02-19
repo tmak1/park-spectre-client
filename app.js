@@ -1,10 +1,15 @@
 // https://docs.microsoft.com/en-us/bingmaps/v8-web-control/creating-and-hosting-map-controls/creating-a-basic-map-control
 // may be we need axios to make http request
+<<<<<<< HEAD
 const url = 'http://localhost:4567/usemap'
 var map
 var bays
 
 // the api and the web client are not on the same app anymore. So use full url
+=======
+const url = 'http://localhost:4567/sensors'; 
+// the api and the web client are not on teh same app anymore. So use full url
+>>>>>>> app.js update
 function GetMap() {
         map = new Microsoft.Maps.Map('#map', {
         center: new Microsoft.Maps.Location(-37.8124, 144.9623),
@@ -19,6 +24,7 @@ function GetMap() {
     creatInfoBox(map);
 } 
 
+<<<<<<< HEAD
 var checkBayStatus = (bays, displayBayValue) => {
     // hide bay info slide down
     var bayInfoSection = document.querySelector('.bayInfo')
@@ -43,6 +49,45 @@ var checkBayStatus = (bays, displayBayValue) => {
             if (bay.status === 'Present') {
                 createPin(bay)
             }
+=======
+var addPin = (map, result, index) => {
+//Create custom Pushpin
+var pin = new Microsoft.Maps.Pushpin(
+    { latitude: result.lat, longitude: result.lon  },
+    {
+        title: '',
+        subTitle: '',
+        text: `${result.status === 'Present' ? 'X' : 'O'}`
+    });
+    // var pushpinClicked = 
+    pin.metadata = {
+        title: result.description1,
+        latlong: `${result.lat} ${result.lon}`  
+    };
+    // Microsoft.Maps.Events.addHandler(pin, 'mouseover', function (e) {
+    //     e.target.setOptions({ 
+    //         subTitle: 'Melbourne',
+    //     });
+    // });
+    // Microsoft.Maps.Events.addHandler(pin, 'mouseout', function (e) {
+    //     e.target.setOptions({ 
+    //         subTitle: '',
+    //     });
+    // });
+    
+    Microsoft.Maps.Events.addHandler(pin, 'click', (e) => {
+        //Make sure the infobox has metadata to display.
+        console.log(e.target.metadata);
+        if (e.target.metadata) {
+            //Set the infobox options with the metadata of the pushpin.
+            infobox.setOptions({
+                location: e.target.getLocation(),
+                title: e.target.metadata.title,
+                description: e.target.metadata.latlong,
+                visible: true
+            });        
+            
+>>>>>>> app.js update
         }
     })
 }
