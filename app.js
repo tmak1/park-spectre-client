@@ -1,83 +1,85 @@
 // https://docs.microsoft.com/en-us/bingmaps/v8-web-control/creating-and-hosting-map-controls/creating-a-basic-map-control
 // may be we need axios to make http request
-const url = 'http://localhost:4567/usemap'; 
+const url = 'http://localhost:4567/usemap'
+var map
 // the api and the web client are not on teh same app anymore. So use full url
 function GetMap() {
-    var map = new Microsoft.Maps.Map('#map', {
+        map = new Microsoft.Maps.Map('#map', {
         center: new Microsoft.Maps.Location(-37.8124, 144.9623),
         zoom: 15
     });
     axios
         .get(url)
         .then(results => {
-            // shows all bay information
-            // console.log("all results:")
-            // console.log(results);
+            console.log(results)
             results.data.forEach((result, index) => {
-                addPin(map, result, index);
+                addPin(result, index, displayBays.value)
             }); 
-            
         })  
     creatInfoBox(map);
 } 
 
-var addPin = (map, result, index) => {
-//Create custom Pushpin
-    // check if bay is occupied
-
-    var bayStatus;
-    var bayColor;
-    if (result.status === "Present") {
-        bayStatus = "Bay occupied"
-        bayColor = "red"
-    } else {
-        bayStatus = "Bay empty"
-        bayColor = "green"
+var addPin = (result, index, displayBays) => {
+    if (displayBays === 'both') {
+        createAllPins(result, index)
+    } else if (displayBays === 'empty') {
+        if (result.status !== 'Present') {
+            createAllPins(result, index)
+        }
+    } else if (displayBays === 'occupied') {
+        if (result.status === 'Present') {
+            createAllPins(result, index)
+        }
     }
-
-    var pin = new Microsoft.Maps.Pushpin(
-        { 
-            latitude: result.lat, 
-            longitude: result.lon, 
-        }, 
-        {
-            color: bayColor
-        }
-    );
-
-
-    pin.metadata = {
-        title: `Parking bay: ${result.bayid}`,
-        description: `Bay status: ${bayStatus} <br> Bay type: ${result.typedesc1}`, 
-        id: result.bayid, 
-        allData: result
-    };
-    
-    Microsoft.Maps.Events.addHandler(pin, 'click', (e) => {
-        //Make sure the infobox has metadata to display.
-        // console.log(e.target.metadata);
-        if (e.target.metadata) {
-            //Set the infobox options with the metadata of the pushpin.
-            infobox.setOptions({
-                location: e.target.getLocation(),
-                title: e.target.metadata.title,
-                description: e.target.metadata.description,
-                visible: true,
-                actions: [{
-                    label: 'More info',
-                    eventHandler: function (event) {
-                        event.preventDefault()
-                        getParkingBayInfo(e.target.metadata.allData)
-                    }
-                }]
-            });        
-        }
-    });
-    //Add the pushpin to the map
-    map.entities.push(pin);
 }
 
- var creatInfoBox = map => {
+var createAllPins = (result, index) => {
+// check if bay is occupied
+        var bayStatus;
+        var bayColor;
+        if (result.status === "Present") {
+            bayStatus = "Bay occupied"
+            bayColor = "red"
+        } else {
+            bayStatus = "Bay empty"
+            bayColor = "green"
+        }
+
+        var pin = new Microsoft.Maps.Pushpin(
+            { latitude: result.lat, longitude: result.lon }, 
+            { color: bayColor }
+        );
+
+        pin.metadata = {
+            title: `Parking bay: ${result.bayid}`,
+            description: `Bay status: ${bayStatus} <br> Bay type: ${result.typedesc1}`, 
+            id: result.bayid, 
+            allData: result
+        };
+        
+        Microsoft.Maps.Events.addHandler(pin, 'click', (e) => {
+            if (e.target.metadata) {
+                //Set the infobox options with the metadata of the pushpin.
+                infobox.setOptions({
+                    location: e.target.getLocation(),
+                    title: e.target.metadata.title,
+                    description: e.target.metadata.description,
+                    visible: true,
+                    actions: [{
+                        label: 'More info',
+                        eventHandler: function (event) {
+                            event.preventDefault()
+                            getParkingBayInfo(e.target.metadata.allData)
+                        }
+                    }]
+                });        
+            }
+        });
+        //Add the pushpin to the map
+        map.entities.push(pin);
+}
+
+var creatInfoBox = map => {
         //Create an infobox at the center of the map but don't show it.
         infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
             visible: false,
@@ -89,9 +91,7 @@ var addPin = (map, result, index) => {
         infobox.setMap(map);
     }
 
-var getParkingBayInfo = data => {
-    console.log(data)
-    
+var getParkingBayInfo = data => {    
     var bayInfoSection = document.querySelector('.bayInfo')
     if (bayInfoSection.style.display !== 'block') {
         $('.bayInfo').slideToggle(350);
@@ -120,9 +120,11 @@ $('.toggle').click(function(e) {
     e.preventDefault();
     $('.about').slideToggle(350);
 }); 
-    
-    
+       
 $('.toggleInfo').click(function(e) {
     e.preventDefault();
     $('.bayInfo').slideToggle(350);
 }); 
+
+let displayBays = document.querySelector('#displayBays');
+displayBays.addEventListener("change", GetMap)
