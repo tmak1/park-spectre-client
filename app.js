@@ -105,10 +105,17 @@ var getParkingBayInfo = data => {
     if (data.description5 !== null) { descriptions.push(data.description5) }
     if (data.description6 !== null) { descriptions.push(data.description6) }
 
+    var status;
+    if (data.status === 'Present') {
+        status = 'Bay occupied'
+    } else {
+        status = 'Bay empty'
+    }
+
     var infoDiv = document.querySelector('.infoList')
     infoDiv.innerHTML = `
-        <li>Parking bay: ${data.bayid}</li>
-        <li>Bay status: ${data.status}</li>
+        <p class="infoListHeading">Parking bay: ${data.bayid}</p>
+        <li>Bay status: ${status}</li>
         <li>Bay info: </li>
             <ul>
                 <li>${descriptions.join("<li>")}</li>

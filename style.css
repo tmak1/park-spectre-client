@@ -47,13 +47,13 @@ a {
     background: rgba(255, 255, 255, 0.9);
 }
 
-.about p:first-child {
-    padding: 20px 20px 0px;
+.hide {
+    padding: 0px 20px;
+    text-align: right;
 }
 
-.hide {
+.aboutPara {
     padding: 0px 20px 20px;
-    text-align: right;
 }
 
 /* drop downs */
@@ -93,9 +93,25 @@ form {
     z-index: 100000;
 }
 
-.bayInfoList p {
+.infoListHeading {
+    text-align: left;
+    font-weight: bold;
+    margin-top: 0;
+}
+
+.togglePara {
     margin: 0;
     text-align: right;
+}
+
+.toggleInfo, .toggleBtn {
+    text-decoration: none;
+    border-radius: 50px;
+    padding: 0 4px;
+    border-radius: 50%;
+    font-size: 1em;
+    background-color: black;
+    color: white;
 }
 
 /* footer styling */
