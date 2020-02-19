@@ -7,84 +7,122 @@ function GetMap() {
         center: new Microsoft.Maps.Location(-37.8124, 144.9623),
         zoom: 15
     });
-    creatInfoBox(map);
     axios
-    .get(url)
-    .then(results => {
-        // shows all bay information
-        console.log("all results:")
-        console.log(results);
-        results.data.forEach((result, index) => {
-            addPin(map, result, index);
-        }); 
-        
-    })  
+        .get(url)
+        .then(results => {
+            // shows all bay information
+            // console.log("all results:")
+            // console.log(results);
+            results.data.forEach((result, index) => {
+                addPin(map, result, index);
+            }); 
+            
+        })  
+    creatInfoBox(map);
 } 
 
 var addPin = (map, result, index) => {
 //Create custom Pushpin
-var pin = new Microsoft.Maps.Pushpin(
-    { latitude: result.lat, longitude: result.lon  },
-    {
-        title: '',
-        subTitle: '',
-        text: index
-    });
-    // var pushpinClicked = 
+    // check if bay is occupied
+
+    var bayStatus;
+    var bayColor;
+    if (result.status === "Present") {
+        bayStatus = "Bay occupied"
+        bayColor = "red"
+    } else {
+        bayStatus = "Bay empty"
+        bayColor = "green"
+    }
+
+    var pin = new Microsoft.Maps.Pushpin(
+        { 
+            latitude: result.lat, 
+            longitude: result.lon, 
+        }, 
+        {
+            color: bayColor
+        }
+    );
+
+
     pin.metadata = {
-        title: result.description1,
-        latlong: `${result.lat} ${result.lon}`  
+        title: `Parking bay: ${result.bayid}`,
+        description: `Bay status: ${bayStatus} <br> Bay type: ${result.typedesc1}`, 
+        id: result.bayid, 
+        allData: result
     };
-    // Microsoft.Maps.Events.addHandler(pin, 'mouseover', function (e) {
-    //     e.target.setOptions({ 
-    //         subTitle: 'Melbourne',
-    //     });
-    // });
-    // Microsoft.Maps.Events.addHandler(pin, 'mouseout', function (e) {
-    //     e.target.setOptions({ 
-    //         subTitle: '',
-    //     });
-    // });
     
     Microsoft.Maps.Events.addHandler(pin, 'click', (e) => {
         //Make sure the infobox has metadata to display.
-        console.log(e.target.metadata);
+        // console.log(e.target.metadata);
         if (e.target.metadata) {
             //Set the infobox options with the metadata of the pushpin.
             infobox.setOptions({
                 location: e.target.getLocation(),
                 title: e.target.metadata.title,
-                description: e.target.metadata.latlong,
-                visible: true
+                description: e.target.metadata.description,
+                visible: true,
+                actions: [{
+                    label: 'More info',
+                    eventHandler: function (event) {
+                        event.preventDefault()
+                        getParkingBayInfo(e.target.metadata.allData)
+                    }
+                }]
             });        
-            
         }
     });
     //Add the pushpin to the map
     map.entities.push(pin);
 }
 
-var creatInfoBox = map => {
-    //Create an infobox at the center of the map but don't show it.
-    infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
-        visible: false,
-        actions: [{
-            label: 'Handler1',
-            eventHandler: function () {
-                alert('Handler1');
-            }
-        }, {
-            label: 'Handler2',
-            eventHandler: function () {
-                alert('Handler2');
-            }
-        }]
-    });
-    //Assign the infobox to a map instance.
-    infobox.setMap(map);
+ var creatInfoBox = map => {
+        //Create an infobox at the center of the map but don't show it.
+        infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
+            visible: false,
+            actions: [{
+                label: 'More info',
+            }]
+        });
+        //Assign the infobox to a map instance.
+        infobox.setMap(map);
+    }
+
+var getParkingBayInfo = data => {
+    console.log(data)
+    
+    var bayInfoSection = document.querySelector('.bayInfo')
+    if (bayInfoSection.style.display !== 'block') {
+        $('.bayInfo').slideToggle(350);
+    }
+
+    var descriptions = []
+    if (data.description1 !== null) { descriptions.push(data.description1) } 
+    if (data.description2 !== null) { descriptions.push(data.description2) }
+    if (data.description3 !== null) { descriptions.push(data.description3) }
+    if (data.description4 !== null) { descriptions.push(data.description4) }
+    if (data.description5 !== null) { descriptions.push(data.description5) }
+    if (data.description6 !== null) { descriptions.push(data.description6) }
+
+    var infoDiv = document.querySelector('.infoList')
+    infoDiv.innerHTML = `
+        <li>Parking bay: ${data.bayid}</li>
+        <li>Bay status: ${data.status}</li>
+        <li>Bay info: </li>
+            <ul>
+                <li>${descriptions.join("<li>")}</li>
+            </ul>
+        `
 }
 
 $('.toggle').click(function(e) {
     e.preventDefault();
     $('.about').slideToggle(350);
-});
+}); 
+    
+    
+$('.toggleInfo').click(function(e) {
+    e.preventDefault();
+    $('.bayInfo').slideToggle(350);
+}); 
