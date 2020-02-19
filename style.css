@@ -30,7 +30,7 @@ a {
     max-width: 800px;
     margin: auto;
     padding: 10px;
-    display: grid;
+    /* display: grid; */
     position: relative;
 }
 
@@ -43,7 +43,7 @@ a {
     margin-top: 0px;
     margin-bottom: 0px;
     position: relative;
-    z-index: 100000;
+    z-index: 1000000;
     background: rgba(255, 255, 255, 0.9);
 }
 
@@ -56,6 +56,7 @@ a {
     text-align: right;
 }
 
+/* drop downs */
 form {
     padding-bottom: 5px;
     text-align: right;
@@ -71,6 +72,30 @@ form {
 /* remove map type drop down */
 .NavBar_MapTypeButtonContainerWrapper {
     display: none;
+}
+
+.bayInfo {
+    width: 300px;
+    position: absolute;
+    display: none;
+}
+
+.bayInfoList {
+    margin: 0px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    position: relative;
+    z-index: 100000;
+}
+
+.bayInfo li {
+    position: relative;
+    z-index: 100000;
+}
+
+.bayInfoList p {
+    margin: 0;
+    text-align: right;
 }
 
 /* footer styling */
