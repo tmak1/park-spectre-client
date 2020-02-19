@@ -2,7 +2,9 @@
 // may be we need axios to make http request
 const url = 'http://localhost:4567/usemap'
 var map
-// the api and the web client are not on teh same app anymore. So use full url
+var bays
+
+// the api and the web client are not on the same app anymore. So use full url
 function GetMap() {
         map = new Microsoft.Maps.Map('#map', {
         center: new Microsoft.Maps.Location(-37.8124, 144.9623),
@@ -11,33 +13,34 @@ function GetMap() {
     axios
         .get(url)
         .then(results => {
-            console.log(results)
-            results.data.forEach((result, index) => {
-                addPin(result, index, displayBays.value)
-            }); 
+            bays = results
+            checkBayStatus(bays, displayBays.value)
         })  
     creatInfoBox(map);
 } 
 
-var addPin = (result, index, displayBays) => {
-    if (displayBays === 'both') {
-        createAllPins(result, index)
-    } else if (displayBays === 'empty') {
-        if (result.status !== 'Present') {
-            createAllPins(result, index)
+var checkBayStatus = (bays, displayBayValue) => {
+    map.entities.clear()
+    bays.data.forEach(bay => {
+        if (displayBayValue === 'both') {
+            createPin(bay)
+        } else if (displayBayValue === 'empty') {
+            if (bay.status !== 'Present') {
+                createPin(bay)
+            }
+        } else if (displayBayValue === 'occupied') {
+            if (bay.status === 'Present') {
+                createPin(bay)
+            }
         }
-    } else if (displayBays === 'occupied') {
-        if (result.status === 'Present') {
-            createAllPins(result, index)
-        }
-    }
+    })
 }
 
-var createAllPins = (result, index) => {
+var createPin = (bay) => {
 // check if bay is occupied
         var bayStatus;
         var bayColor;
-        if (result.status === "Present") {
+        if (bay.status === "Present") {
             bayStatus = "Bay occupied"
             bayColor = "red"
         } else {
@@ -46,15 +49,15 @@ var createAllPins = (result, index) => {
         }
 
         var pin = new Microsoft.Maps.Pushpin(
-            { latitude: result.lat, longitude: result.lon }, 
+            { latitude: bay.lat, longitude: bay.lon }, 
             { color: bayColor }
         );
 
         pin.metadata = {
-            title: `Parking bay: ${result.bayid}`,
-            description: `Bay status: ${bayStatus} <br> Bay type: ${result.typedesc1}`, 
-            id: result.bayid, 
-            allData: result
+            title: `Parking bay: ${bay.bayid}`,
+            description: `Bay status: ${bayStatus} <br> Bay type: ${bay.typedesc1}`, 
+            id: bay.bayid, 
+            allData: bay
         };
         
         Microsoft.Maps.Events.addHandler(pin, 'click', (e) => {
@@ -134,4 +137,6 @@ $('.toggleInfo').click(function(e) {
 }); 
 
 let displayBays = document.querySelector('#displayBays');
-displayBays.addEventListener("change", GetMap)
+displayBays.addEventListener("change", () => {
+    checkBayStatus(bays, displayBays.value)
+})
