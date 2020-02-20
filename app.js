@@ -31,21 +31,16 @@ var checkBayStatus = (bays, displayBayValue) => {
     })
     // clear pins from map
     map.entities.clear()
-    // clear drawn pin array
-    var drawnPins = []
     // check bay status
     bays.data.forEach(bay => {
         if (displayBayValue === 'both') {
-            drawnPins.push(bay)
             createPin(bay)
         } else if (displayBayValue === 'empty') {
             if (bay.status !== 'Present') {
-                drawnPins.push(bay)
                 createPin(bay)
             }
         } else if (displayBayValue === 'occupied') {
             if (bay.status === 'Present') {
-                drawnPins.push(bay)
                 createPin(bay)
             }
         }
@@ -142,9 +137,78 @@ var getParkingBayInfo = bay => {
         `
 }
 
+var bayInfoTable = (bay) => {
+    var descriptions = []
+    if (bay.description1 !== null) { descriptions.push(bay.description1) } 
+    if (bay.description2 !== null) { descriptions.push(bay.description2) }
+    if (bay.description3 !== null) { descriptions.push(bay.description3) }
+    if (bay.description4 !== null) { descriptions.push(bay.description4) }
+    if (bay.description5 !== null) { descriptions.push(bay.description5) }
+    if (bay.description6 !== null) { descriptions.push(bay.description6) }
+    
+    var status;
+    if (bay.status === 'Present') {
+        status = 'Bay occupied'
+    } else {
+        status = 'Bay empty'
+    }
+
+    var table = document.querySelector('.bayListTable')
+    var row = table.insertRow(-1)
+    var cell1 = row.insertCell(0)
+    var cell2 = row.insertCell(1)
+    var cell3 = row.insertCell(2)
+    cell1.innerHTML = bay.bayid
+    cell2.innerHTML = status
+    cell3.innerHTML = `<li>${descriptions.join("<li>")}</li>`
+}
+
+var createInfoList = (i) => {
+    document.querySelector('.displayList').style.display = 'none'
+    document.querySelector('.hideList').style.display = 'block'
+    document.querySelector('#bayList').style.display = 'block'
+    
+    var table = document.querySelector('.bayListTable')
+    table.innerHTML = `<tr><th>Bay ID</th><th>Bay Status</th><th>Bay Description</th></tr>`
+
+    var num = 0
+    bays.data.forEach(bay => {
+        if (displayBaysByStatus.value === 'both') {
+            if (num < i) {
+                bayInfoTable(bay)
+                num ++
+            }
+        } else if (displayBaysByStatus.value === 'empty') {
+            if (bay.status !== 'Present') {
+                if (num < i) {
+                    bayInfoTable(bay)
+                    num ++
+                }
+            }
+        } else if (displayBaysByStatus.value === 'occupied') {
+            if (bay.status === 'Present') {
+                if (num < i) {
+                    bayInfoTable(bay)
+                    num ++
+                }
+            }
+        }
+    })
+}
+
+var destroyInfoList = () => {
+    document.querySelector('.displayList').style.display = 'block'
+    document.querySelector('.hideList').style.display = 'none'
+    document.querySelector('#bayList').style.display = 'none'
+    var bayListTable = document.querySelector('.bayListTable')
+    bayListTable.innerHTML = `<tr><th>Bay ID</th><th>Bay Status</th><th>Bay Description</th></tr>`
+    i = 10
+}
+
 // event listeners
 let displayBaysByStatus = document.querySelector('#bayStatus');
 displayBaysByStatus.addEventListener('change', () => {
+    destroyInfoList()
     checkBayStatus(bays, displayBaysByStatus.value)
 })
 
@@ -154,7 +218,22 @@ dispalyBayByHour.addEventListener('change', () => {
 })
 
 document.querySelector('#reset').addEventListener('click', () => {
-        checkBayStatus(bays, 'both')
+    checkBayStatus(bays, 'both')
+})
+
+var i = 10
+document.querySelector('.displayList').addEventListener('click', () => {
+    createInfoList(i)
+})
+
+document.querySelector('.hideList').addEventListener('click', () => {
+    destroyInfoList()
+})
+
+document.querySelector('.load').addEventListener('click', e => {
+    e.preventDefault()
+    i += 10
+    createInfoList(i)
 })
 
 // toggle functions

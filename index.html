@@ -30,27 +30,32 @@
             </p>
         </aside>
 
-        <section class="mapContent">            
-            <form action="">
-                <select name="bayStatus" id="bayStatus">
-                    <option value="both">Empty & Occupied Bays</option>
-                    <option value="empty">Empty Bays Only</option>
-                    <option value="occupied">Occupied Bays Only</option>
-                </select>
+        <section class="mapContent">
+            <nav>
+                <a href="#bayList" class="displayList">Display list</a>
+                <a href="javascript:void(0);" class="hideList" style="display: none;">Hide list</a>
 
-                <select name="hours" id="hours">
-                    <option value="placeholder">Length of stay</option>
-                    <option value="15">15 minutes</option>
-                    <option value="30">30 minutes</option>
-                    <option value="60">60 minutes</option>
-                    <option value="120">120 minutes</option>
-                    <option value="180">180 minutes</option>
-                    <option value="240">240 minutes</option>
-                </select>
+                <form action="">
+                    <select name="bayStatus" id="bayStatus">
+                        <option value="both">Empty & Occupied Bays</option>
+                        <option value="empty">Empty Bays Only</option>
+                        <option value="occupied">Occupied Bays Only</option>
+                    </select>
 
-                <input type="reset" value="Reset filters" id="reset">
-            </form>
-            
+                    <select name="hours" id="hours">
+                        <option value="placeholder">Length of stay</option>
+                        <option value="15">15 minutes</option>
+                        <option value="30">30 minutes</option>
+                        <option value="60">60 minutes</option>
+                        <option value="120">120 minutes</option>
+                        <option value="180">180 minutes</option>
+                        <option value="240">240 minutes</option>
+                    </select>
+
+                    <input type="reset" value="Reset filters" id="reset">
+                </form>
+            </nav>            
+
             <section class="bayInfo">
                 <ul class="bayInfoList">
                     <p class="togglePara"><a class="toggleInfo" href="javascript:void(0);">&times;</a></p>
@@ -59,6 +64,18 @@
             </section>
 
             <div id="map"></div>
+        </section>
+
+        <section id="bayList" style="display: none;">
+            <h3 class="infoListHeading">Parking Bay Information List</h3>
+            <table class="bayListTable">
+                <tr>
+                    <th>Bay ID</th>
+                    <th>Bay Status</th>
+                    <th>Bay Description</th>
+                </tr>
+            </table>
+            <button class="load">Load More</button>
         </section>
 
 

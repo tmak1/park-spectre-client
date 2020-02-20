@@ -6,6 +6,11 @@ header {
     border-bottom: 1px solid black;
 }
 
+nav {
+    display: grid;
+    grid-template-columns: .5fr 1.5fr;
+}
+
 a {
     color: black;
 }
@@ -112,6 +117,19 @@ form {
     font-size: 1em;
     background-color: black;
     color: white;
+}
+
+.infoListHeading {
+    padding-top: 10px;
+}
+
+table {
+    border-collapse: collapse;
+}
+  
+table, th, td {
+    border: 1px solid black;
+    padding: 5px;
 }
 
 /* footer styling */
