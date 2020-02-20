@@ -4,7 +4,7 @@
 var map
 var bays
 var loginTime
-var infobox
+
 
 
 
