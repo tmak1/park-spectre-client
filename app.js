@@ -5,9 +5,6 @@ var map
 var bays
 var loginTime
 
-
-
-
 var creatInfoBox = map => {
     //Create an infobox at the center of the map but don't show it.
     infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
@@ -46,9 +43,6 @@ function GetMap() {
             checkBayStatus(bays, displayBaysByStatus.value)
         });
     })  
-    
-    
-
 } 
 
 var checkBayStatus = (bays, displayBayValue) => {
@@ -162,23 +156,7 @@ var getParkingBayInfo = bay => {
     }
 
     var descriptions = getBayDescriptions(bay)
-
-    // var descriptions = []
-    // if (bay.description1 !== null) { descriptions.push(bay.description1) } 
-    // if (bay.description2 !== null) { descriptions.push(bay.description2) }
-    // if (bay.description3 !== null) { descriptions.push(bay.description3) }
-    // if (bay.description4 !== null) { descriptions.push(bay.description4) }
-    // if (bay.description5 !== null) { descriptions.push(bay.description5) }
-    // if (bay.description6 !== null) { descriptions.push(bay.description6) }
-
     var status = getBayStatus(bay)
-
-    // var status;
-    // if (bay.status === 'Present') {
-    //     status = 'Bay occupied'
-    // } else {
-    //     status = 'Bay empty'
-    // }
 
     var infoDiv = document.querySelector('.infoList')
     infoDiv.innerHTML = `
@@ -193,23 +171,7 @@ var getParkingBayInfo = bay => {
 
 var bayInfoTable = (bay) => {
     var descriptions = getBayDescriptions(bay)
-    
-    // var descriptions = []
-    // if (bay.description1 !== null) { descriptions.push(bay.description1) } 
-    // if (bay.description2 !== null) { descriptions.push(bay.description2) }
-    // if (bay.description3 !== null) { descriptions.push(bay.description3) }
-    // if (bay.description4 !== null) { descriptions.push(bay.description4) }
-    // if (bay.description5 !== null) { descriptions.push(bay.description5) }
-    // if (bay.description6 !== null) { descriptions.push(bay.description6) }
-    
     var status = getBayStatus(bay)
-
-    // var status;
-    // if (bay.status === 'Present') {
-    //     status = 'Bay occupied'
-    // } else {
-    //     status = 'Bay empty'
-    // }
 
     var table = document.querySelector('.allBaysTable')
     var row = table.insertRow(-1)
