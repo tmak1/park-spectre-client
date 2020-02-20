@@ -1,8 +1,13 @@
 // https://docs.microsoft.com/en-us/bingmaps/v8-web-control/creating-and-hosting-map-controls/creating-a-basic-map-control
 // may be we need axios to make http request
-const url = 'http://localhost:4567/usemap'
+const url = 'http://localhost:4567/sensors'
 var map
 var bays
+var loginTime
+
+// client side code for SSE :
+const es = new EventSource("http://localhost:4567/stream");
+
 
 // the api and the web client are not on the same app anymore. So use full url
 function GetMap() {
@@ -10,14 +15,24 @@ function GetMap() {
         center: new Microsoft.Maps.Location(-37.8124, 144.9623),
         zoom: 15
     });
-    axios
-        .get(url)
-        .then(results => {
-            bays = results
+    // axios
+    //     .get(url)
+    //     .then(results => {
+    //         bays = results
+    //         checkBayStatus(bays, displayBaysByStatus.value)
+    //         loginTime = new Date();
+    //         console.log(loginTime);
+    //     })  
+    
+    es.addEventListener('myEvent', ev => {
+            var bayInfo = JSON.parse(ev.data)
+            // console.log(bayInfo);
+            bays = bayInfo;
             checkBayStatus(bays, displayBaysByStatus.value)
-        })  
+        });
+        
     creatInfoBox(map);
-} 
+    } 
 
 var checkBayStatus = (bays, displayBayValue) => {
     // hide bay info slide down
@@ -32,7 +47,7 @@ var checkBayStatus = (bays, displayBayValue) => {
     // clear pins from map
     map.entities.clear()
     // check bay status
-    bays.data.forEach(bay => {
+    bays.forEach(bay => {
         if (displayBayValue === 'both') {
             createPin(bay)
         } else if (displayBayValue === 'empty') {
@@ -246,3 +261,6 @@ $('.toggleInfo').click(function(e) {
     e.preventDefault();
     $('.bayInfo').slideToggle(250);
 }); 
+
+
+
