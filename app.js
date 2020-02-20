@@ -1,13 +1,22 @@
 // https://docs.microsoft.com/en-us/bingmaps/v8-web-control/creating-and-hosting-map-controls/creating-a-basic-map-control
 // may be we need axios to make http request
-const url = 'http://localhost:4567/sensors'
+// const url = 'http://localhost:4567/sensors'
 var map
 var bays
 var loginTime
 
+
+
+axios.get("http://localhost:4567/usemap")
+    .then(results => {
+        bays = results.data;
+        checkBayStatus(bays, displayBaysByStatus.value)
+        loginTime = new Date();
+        console.log(loginTime);
+    })  
+
 // client side code for SSE :
 const es = new EventSource("http://localhost:4567/stream");
-
 
 // the api and the web client are not on the same app anymore. So use full url
 function GetMap() {
@@ -47,6 +56,7 @@ var checkBayStatus = (bays, displayBayValue) => {
     // clear pins from map
     map.entities.clear()
     // check bay status
+    console.log(bays);
     bays.forEach(bay => {
         if (displayBayValue === 'both') {
             createPin(bay)
