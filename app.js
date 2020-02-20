@@ -5,11 +5,9 @@ var map
 var bays
 var loginTime
 
-// client side code :
+// client side code for SSE :
 const es = new EventSource("http://localhost:4567/stream");
-// es.addEventListener('myEvent', ev => {
-// 	console.log(ev.data);
-// });
+
 
 // the api and the web client are not on the same app anymore. So use full url
 function GetMap() {
