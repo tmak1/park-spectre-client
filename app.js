@@ -4,19 +4,21 @@
 var map
 var bays
 var loginTime
+var infobox
 
 
 
-axios.get("http://localhost:4567/usemap")
-    .then(results => {
-        bays = results.data;
-        checkBayStatus(bays, displayBaysByStatus.value)
-        loginTime = new Date();
-        console.log(loginTime);
-    })  
-
-// client side code for SSE :
-const es = new EventSource("http://localhost:4567/stream");
+var creatInfoBox = map => {
+    //Create an infobox at the center of the map but don't show it.
+    infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
+        visible: false,
+        actions: [{
+            label: 'More info',
+        }]
+    });
+    //Assign the infobox to a map instance.
+    infobox.setMap(map);
+}
 
 // the api and the web client are not on the same app anymore. So use full url
 function GetMap() {
@@ -24,24 +26,30 @@ function GetMap() {
         center: new Microsoft.Maps.Location(-37.8124, 144.9623),
         zoom: 15
     });
-    // axios
-    //     .get(url)
-    //     .then(results => {
-    //         bays = results
-    //         checkBayStatus(bays, displayBaysByStatus.value)
-    //         loginTime = new Date();
-    //         console.log(loginTime);
-    //     })  
-    
-    es.addEventListener('myEvent', ev => {
+
+    creatInfoBox(map);
+
+    axios.get("http://localhost:4567/usemap")
+    .then(results => {
+        bays = results.data;
+        checkBayStatus(bays, displayBaysByStatus.value);
+        loginTime = new Date();
+        console.log(loginTime);
+
+        // client side code for SSE :
+        const es = new EventSource("http://localhost:4567/stream");
+
+        es.addEventListener('myEvent', ev => {
             var bayInfo = JSON.parse(ev.data)
             console.log(bayInfo);
             bays = bayInfo;
             checkBayStatus(bays, displayBaysByStatus.value)
         });
-        
-    creatInfoBox(map);
-    } 
+    })  
+    
+    
+
+} 
 
 var checkBayStatus = (bays, displayBayValue) => {
     // hide bay info slide down
@@ -118,17 +126,7 @@ var createPin = (bay) => {
         map.entities.push(pin);
 }
 
-var creatInfoBox = map => {
-    //Create an infobox at the center of the map but don't show it.
-    infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
-        visible: false,
-        actions: [{
-            label: 'More info',
-        }]
-    });
-    //Assign the infobox to a map instance.
-    infobox.setMap(map);
-}
+
 
 var getBayDescriptions = bay => {
     var descriptions = []
