@@ -26,7 +26,7 @@
                 <a class="toggle toggleBtn" href="javascript:void(0);">&times;</a>
             </p>           
             <p class="aboutPara">Welcome to Park-Inspector! 
-                Our app uses data provided by Melbourne City Council that looks at the on-street parking censors around the city. The data is updated every XXX minutes. A vacant parking space is represented by a XXX and a occupied space is represented by a XXX. 
+                Our app uses data provided by Melbourne City Council that looks at the on-street parking censors around the city. The data is updated every XXX minutes. A vacant parking space is represented by a green circle and a occupied space is represented by a circle. 
             </p>
         </aside>
 
@@ -40,16 +40,6 @@
                         <option value="both">Empty & Occupied Bays</option>
                         <option value="empty">Empty Bays Only</option>
                         <option value="occupied">Occupied Bays Only</option>
-                    </select>
-
-                    <select name="hours" id="hours">
-                        <option value="placeholder">Length of stay</option>
-                        <option value="15">15 minutes</option>
-                        <option value="30">30 minutes</option>
-                        <option value="60">60 minutes</option>
-                        <option value="120">120 minutes</option>
-                        <option value="180">180 minutes</option>
-                        <option value="240">240 minutes</option>
                     </select>
 
                     <input type="reset" value="Reset filters" id="reset">
@@ -66,9 +56,9 @@
             <div id="map"></div>
         </section>
 
-        <section id="bayList" style="display: none;">
-            <h3 class="infoListHeading">Parking Bay Information List</h3>
-            <table class="bayListTable">
+        <section id="allBaysList" style="display: none;">
+            <h3 class="allBaysInfoListHeading">Parking Bay Information List</h3>
+            <table class="allBaysTable">
                 <tr>
                     <th>Bay ID</th>
                     <th>Bay Status</th>

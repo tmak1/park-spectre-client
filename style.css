@@ -1,18 +1,15 @@
+/* general styling */
 body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-header {
-    border-bottom: 1px solid black;
-}
-
-nav {
-    display: grid;
-    grid-template-columns: .5fr 1.5fr;
-}
-
 a {
     color: black;
+}
+
+/* header bar styling */
+header {
+    border-bottom: 1px solid black;
 }
 
 .header-content {
@@ -31,15 +28,20 @@ a {
     justify-self: end;
 }
 
+/* all content minus header */
 .container {
     max-width: 800px;
     margin: auto;
     padding: 10px;
-    /* display: grid; */
     position: relative;
 }
 
-/* how it works toggle styling */
+nav {
+    display: grid;
+    grid-template-columns: .5fr 1.5fr;
+}
+
+/* about toggle styling */
 .about {
     position: absolute;
 }
@@ -65,10 +67,10 @@ a {
 form {
     padding-bottom: 5px;
     text-align: right;
+    font-size: 1em;
 }
 
 /* map styling */
-
 #map {
     width: 100%;
     height: 600px;
@@ -79,6 +81,7 @@ form {
     display: none;
 }
 
+/* info box on map */
 .bayInfo {
     width: 300px;
     position: absolute;
@@ -98,12 +101,6 @@ form {
     z-index: 100000;
 }
 
-.infoListHeading {
-    text-align: left;
-    font-weight: bold;
-    margin-top: 0;
-}
-
 .togglePara {
     margin: 0;
     text-align: right;
@@ -119,10 +116,15 @@ form {
     color: white;
 }
 
-.infoListHeading {
+/* information list at bottom of page */
+.allBaysInfoListHeading {
+    text-align: left;
+    font-weight: bold;
+    margin-top: 0;
     padding-top: 10px;
 }
 
+/* information list table styling */
 table {
     border-collapse: collapse;
 }
@@ -148,4 +150,3 @@ footer p {
     font-size: small;
     text-align: center;
 }
-

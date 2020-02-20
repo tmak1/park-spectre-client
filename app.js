@@ -26,7 +26,7 @@ function GetMap() {
     
     es.addEventListener('myEvent', ev => {
             var bayInfo = JSON.parse(ev.data)
-            // console.log(bayInfo);
+            console.log(bayInfo);
             bays = bayInfo;
             checkBayStatus(bays, displayBaysByStatus.value)
         });
@@ -80,9 +80,9 @@ var createPin = (bay) => {
         );
 
         pin.metadata = {
-            title: `Parking bay: ${bay.bayid}`,
+            title: `Parking bay: ${bay.bay_id}`,
             description: `Bay status: ${bayStatus} <br> Bay type: ${bay.typedesc1}`, 
-            id: bay.bayid, 
+            id: bay.bay_id, 
             allData: bay
         };
         
@@ -120,12 +120,7 @@ var creatInfoBox = map => {
     infobox.setMap(map);
 }
 
-var getParkingBayInfo = bay => {    
-    var bayInfoSection = document.querySelector('.bayInfo')
-    if (bayInfoSection.style.display !== 'block') {
-        $('.bayInfo').slideToggle(250);
-    }
-
+var getBayDescriptions = bay => {
     var descriptions = []
     if (bay.description1 !== null) { descriptions.push(bay.description1) } 
     if (bay.description2 !== null) { descriptions.push(bay.description2) }
@@ -133,17 +128,47 @@ var getParkingBayInfo = bay => {
     if (bay.description4 !== null) { descriptions.push(bay.description4) }
     if (bay.description5 !== null) { descriptions.push(bay.description5) }
     if (bay.description6 !== null) { descriptions.push(bay.description6) }
+    return descriptions
+}
 
+var getBayStatus = bay => {
     var status;
     if (bay.status === 'Present') {
         status = 'Bay occupied'
     } else {
         status = 'Bay empty'
     }
+    return status
+}
+
+var getParkingBayInfo = bay => {    
+    var bayInfoSection = document.querySelector('.bayInfo')
+    if (bayInfoSection.style.display !== 'block') {
+        $('.bayInfo').slideToggle(250);
+    }
+
+    var descriptions = getBayDescriptions(bay)
+
+    // var descriptions = []
+    // if (bay.description1 !== null) { descriptions.push(bay.description1) } 
+    // if (bay.description2 !== null) { descriptions.push(bay.description2) }
+    // if (bay.description3 !== null) { descriptions.push(bay.description3) }
+    // if (bay.description4 !== null) { descriptions.push(bay.description4) }
+    // if (bay.description5 !== null) { descriptions.push(bay.description5) }
+    // if (bay.description6 !== null) { descriptions.push(bay.description6) }
+
+    var status = getBayStatus(bay)
+
+    // var status;
+    // if (bay.status === 'Present') {
+    //     status = 'Bay occupied'
+    // } else {
+    //     status = 'Bay empty'
+    // }
 
     var infoDiv = document.querySelector('.infoList')
     infoDiv.innerHTML = `
-        <p class="infoListHeading">Parking bay: ${bay.bayid}</p>
+        <p class="allBaysInfoListHeading">Parking bay: ${bay.bay_id}</p>
         <li>Bay status: ${status}</li>
         <li>Bay info: </li>
             <ul>
@@ -153,27 +178,31 @@ var getParkingBayInfo = bay => {
 }
 
 var bayInfoTable = (bay) => {
-    var descriptions = []
-    if (bay.description1 !== null) { descriptions.push(bay.description1) } 
-    if (bay.description2 !== null) { descriptions.push(bay.description2) }
-    if (bay.description3 !== null) { descriptions.push(bay.description3) }
-    if (bay.description4 !== null) { descriptions.push(bay.description4) }
-    if (bay.description5 !== null) { descriptions.push(bay.description5) }
-    if (bay.description6 !== null) { descriptions.push(bay.description6) }
+    var descriptions = getBayDescriptions(bay)
     
-    var status;
-    if (bay.status === 'Present') {
-        status = 'Bay occupied'
-    } else {
-        status = 'Bay empty'
-    }
+    // var descriptions = []
+    // if (bay.description1 !== null) { descriptions.push(bay.description1) } 
+    // if (bay.description2 !== null) { descriptions.push(bay.description2) }
+    // if (bay.description3 !== null) { descriptions.push(bay.description3) }
+    // if (bay.description4 !== null) { descriptions.push(bay.description4) }
+    // if (bay.description5 !== null) { descriptions.push(bay.description5) }
+    // if (bay.description6 !== null) { descriptions.push(bay.description6) }
+    
+    var status = getBayStatus(bay)
 
-    var table = document.querySelector('.bayListTable')
+    // var status;
+    // if (bay.status === 'Present') {
+    //     status = 'Bay occupied'
+    // } else {
+    //     status = 'Bay empty'
+    // }
+
+    var table = document.querySelector('.allBaysTable')
     var row = table.insertRow(-1)
     var cell1 = row.insertCell(0)
     var cell2 = row.insertCell(1)
     var cell3 = row.insertCell(2)
-    cell1.innerHTML = bay.bayid
+    cell1.innerHTML = bay.bay_id
     cell2.innerHTML = status
     cell3.innerHTML = `<li>${descriptions.join("<li>")}</li>`
 }
@@ -181,13 +210,13 @@ var bayInfoTable = (bay) => {
 var createInfoList = (i) => {
     document.querySelector('.displayList').style.display = 'none'
     document.querySelector('.hideList').style.display = 'block'
-    document.querySelector('#bayList').style.display = 'block'
+    document.querySelector('#allBaysList').style.display = 'block'
     
-    var table = document.querySelector('.bayListTable')
+    var table = document.querySelector('.allBaysTable')
     table.innerHTML = `<tr><th>Bay ID</th><th>Bay Status</th><th>Bay Description</th></tr>`
 
     var num = 0
-    bays.data.forEach(bay => {
+    bays.forEach(bay => {
         if (displayBaysByStatus.value === 'both') {
             if (num < i) {
                 bayInfoTable(bay)
@@ -211,12 +240,13 @@ var createInfoList = (i) => {
     })
 }
 
+// remove bay information list
 var destroyInfoList = () => {
     document.querySelector('.displayList').style.display = 'block'
     document.querySelector('.hideList').style.display = 'none'
-    document.querySelector('#bayList').style.display = 'none'
-    var bayListTable = document.querySelector('.bayListTable')
-    bayListTable.innerHTML = `<tr><th>Bay ID</th><th>Bay Status</th><th>Bay Description</th></tr>`
+    document.querySelector('#allBaysList').style.display = 'none'
+    var allBaysTable = document.querySelector('.allBaysTable')
+    allBaysTable.innerHTML = `<tr><th>Bay ID</th><th>Bay Status</th><th>Bay Description</th></tr>`
     i = 10
 }
 
@@ -227,24 +257,23 @@ displayBaysByStatus.addEventListener('change', () => {
     checkBayStatus(bays, displayBaysByStatus.value)
 })
 
-let dispalyBayByHour = document.querySelector('#hours');
-dispalyBayByHour.addEventListener('change', () => {
-    console.log(dispalyBayByHour.value)
-})
-
+// rest filter buttons
 document.querySelector('#reset').addEventListener('click', () => {
     checkBayStatus(bays, 'both')
 })
 
+// display list button
 var i = 10
 document.querySelector('.displayList').addEventListener('click', () => {
     createInfoList(i)
 })
 
+// hide list button
 document.querySelector('.hideList').addEventListener('click', () => {
     destroyInfoList()
 })
 
+// load more rows on bay information list
 document.querySelector('.load').addEventListener('click', e => {
     e.preventDefault()
     i += 10
@@ -261,6 +290,3 @@ $('.toggleInfo').click(function(e) {
     e.preventDefault();
     $('.bayInfo').slideToggle(250);
 }); 
-
-
-
