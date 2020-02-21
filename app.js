@@ -225,6 +225,7 @@ var destroyInfoList = () => {
 }
 
 // event listeners
+// filter by status drop down event listener
 let displayBaysByStatus = document.querySelector('#bayStatus');
 displayBaysByStatus.addEventListener('change', () => {
     destroyInfoList()
@@ -254,7 +255,6 @@ document.querySelector('.load').addEventListener('click', e => {
     createInfoList(i)
 })
 
-
 var findPin = id => {
     var pin; 
     for (var i = 0; i < map.entities.getLength(); i ++) {
@@ -271,18 +271,22 @@ var tableClick = e => {
     if (isnum === true) {
         var pin = findPin(clickedId)
         infobox.setOptions({
-                location: pin.getLocation(),
-                title: pin.metadata.title,
-                description: pin.metadata.description,
-                visible: true,
-                actions: [{
-                    label: 'More info',
-                    eventHandler: function (event) {
-                        event.preventDefault()
-                        getParkingBayInfo(pin.metadata.allData)
-                    }
-                }]
-            });
+            location: pin.getLocation(),
+            title: pin.metadata.title,
+            description: pin.metadata.description,
+            visible: true,
+            actions: [{
+                label: 'More info',
+                eventHandler: function (event) {
+                    event.preventDefault()
+                    getParkingBayInfo(pin.metadata.allData)
+                }
+            }]
+        });
+        map.setView({
+            center: new Microsoft.Maps.Location(Number(pin.geometry.y), Number(pin.geometry.x)),
+            zoom: 18
+        })
     } else {
         console.log("Is NOT a number")
     }
