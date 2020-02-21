@@ -13,8 +13,7 @@ header {
 }
 
 .header-content {
-    display: grid;
-    grid-template-columns: .5fr .5fr;
+    display: flex;
     max-width: 850px;
     margin: auto;
     align-items: center;
@@ -22,6 +21,7 @@ header {
 
 .logo {
     justify-self: left;
+    flex-grow: 1;
 }
 
 .header-content p {
