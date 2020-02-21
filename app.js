@@ -122,7 +122,6 @@ var pinClick = pin => {
                 }]
             });        
         }
-        debugger
     });
 }
 
@@ -176,7 +175,7 @@ var bayInfoTable = (bay) => {
     var cell1 = row.insertCell(0)
     var cell2 = row.insertCell(1)
     var cell3 = row.insertCell(2)
-    cell1.innerHTML = bay.bay_id
+    cell1.innerHTML = `<a href="#top">${bay.bay_id}</a>`
     cell2.innerHTML = status
     cell3.innerHTML = `<li>${descriptions.join("<li>")}</li>`
 }
@@ -211,6 +210,7 @@ var createInfoList = (i) => {
                 }
             }
         }
+        
     })
 }
 
@@ -253,6 +253,43 @@ document.querySelector('.load').addEventListener('click', e => {
     i += 10
     createInfoList(i)
 })
+
+
+var findPin = id => {
+    var pin; 
+    for (var i = 0; i < map.entities.getLength(); i ++) {
+        pin = map.entities.get(i);
+        if (pin.metadata.id === id) {
+            return pin
+        }
+    }
+}
+
+var tableClick = e => {
+    var clickedId = e.target.innerText
+    var isnum = /^\d+$/.test(clickedId)
+    if (isnum === true) {
+        var pin = findPin(clickedId)
+        infobox.setOptions({
+                location: pin.getLocation(),
+                title: pin.metadata.title,
+                description: pin.metadata.description,
+                visible: true,
+                actions: [{
+                    label: 'More info',
+                    eventHandler: function (event) {
+                        event.preventDefault()
+                        getParkingBayInfo(pin.metadata.allData)
+                    }
+                }]
+            });
+    } else {
+        console.log("Is NOT a number")
+    }
+}
+
+// clickable table
+document.querySelector('table').addEventListener('click', tableClick)
 
 // toggle functions
 $('.toggle').click(function(e) {
