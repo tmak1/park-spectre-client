@@ -28,14 +28,14 @@ function GetMap() {
         bays = results.data;
         checkBayStatus(bays, displayBaysByStatus.value);
         loginTime = new Date();
-        console.log(loginTime);
+        // console.log(loginTime);
 
         // client side code for SSE :
         const es = new EventSource("http://localhost:4567/broadcast");
 
         es.addEventListener('broadcast', ev => {
             var bayInfo = JSON.parse(ev.data)
-            console.log(bayInfo);
+            // console.log(bayInfo);
             bays = bayInfo;
             checkBayStatus(bays, displayBaysByStatus.value)
         });
@@ -55,7 +55,7 @@ var checkBayStatus = (bays, displayBayValue) => {
     // clear pins from map
     map.entities.clear()
     // check bay status
-    console.log(bays);
+    // console.log(bays);
     bays.forEach(bay => {
         if (displayBayValue === 'both') {
             createPin(bay)
@@ -98,29 +98,33 @@ var createPin = (bay) => {
             allData: bay
         };
         
-        Microsoft.Maps.Events.addHandler(pin, 'click', (e) => {
-            if (e.target.metadata) {
-                //Set the infobox options with the metadata of the pushpin.
-                infobox.setOptions({
-                    location: e.target.getLocation(),
-                    title: e.target.metadata.title,
-                    description: e.target.metadata.description,
-                    visible: true,
-                    actions: [{
-                        label: 'More info',
-                        eventHandler: function (event) {
-                            event.preventDefault()
-                            getParkingBayInfo(e.target.metadata.allData)
-                        }
-                    }]
-                });        
-            }
-        });
+        pinClick(pin)
+
         //Add the pushpin to the map
         map.entities.push(pin);
 }
 
-
+var pinClick = pin => {
+    Microsoft.Maps.Events.addHandler(pin, 'click', (e) => {
+        if (e.target.metadata) {
+            //Set the infobox options with the metadata of the pushpin.
+            infobox.setOptions({
+                location: e.target.getLocation(),
+                title: e.target.metadata.title,
+                description: e.target.metadata.description,
+                visible: true,
+                actions: [{
+                    label: 'More info',
+                    eventHandler: function (event) {
+                        event.preventDefault()
+                        getParkingBayInfo(e.target.metadata.allData)
+                    }
+                }]
+            });        
+        }
+        debugger
+    });
+}
 
 var getBayDescriptions = bay => {
     var descriptions = []
