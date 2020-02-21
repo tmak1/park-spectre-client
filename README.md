@@ -1,6 +1,6 @@
 # Park-Inspector
 
-[Live app}(https://tmak1.github.io/park-spectre-client/)
+[Live app](https://tmak1.github.io/park-spectre-client/)
 
 Park-Inspector is an app that reads in the data from the [API we created](https://github.com/tmak1/park-spectre-api) and creates the user interface.
 
