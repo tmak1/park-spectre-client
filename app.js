@@ -55,7 +55,7 @@ var checkBayStatus = (bays, displayBayValue) => {
     // clear pins from map
     map.entities.clear()
     // check bay status
-    // console.log(bays);
+    console.log(bays);
     bays.forEach(bay => {
         if (displayBayValue === 'both') {
             createPin(bay)
