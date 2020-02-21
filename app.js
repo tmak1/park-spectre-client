@@ -23,7 +23,7 @@ function GetMap() {
 
     creatInfoBox(map);
 
-    axios.get("http://parkinspector.herokuapp.com/")
+    axios.get("https://parkinspector.herokuapp.com/")
     .then(results => {
         bays = results.data;
         checkBayStatus(bays, displayBaysByStatus.value);
@@ -31,7 +31,7 @@ function GetMap() {
         // console.log(loginTime);
 
         // client side code for SSE :
-        const es = new EventSource("http://parkinspector.herokuapp.com/broadcast");
+        const es = new EventSource("https://parkinspector.herokuapp.com/broadcast");
 
         es.addEventListener('broadcast', ev => {
             var bayInfo = JSON.parse(ev.data)
