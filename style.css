@@ -95,6 +95,7 @@ form {
     background: rgba(255, 255, 255, 0.9);
     position: relative;
     z-index: 100000;
+    border-radius: 0 0 10px 0;
 }
 
 .bayInfo li {
@@ -132,7 +133,7 @@ form {
 
 .top {
     text-decoration: none;
-    padding: 0 4px;
+    padding: 0 5px;
     border-radius: 50%;
     font-size: 1em;
     background-color: black;
