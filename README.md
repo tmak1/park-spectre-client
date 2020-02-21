@@ -5,6 +5,7 @@
 Park-Inspector is an app that reads in the data from the [API we created](https://github.com/tmak1/park-spectre-api) and creates the user interface.
 
 ## Cool Tech
+* Team created API
 * Bing map API
 * Link between parking bay information list and map
 * Updating pins every 40 seconds
